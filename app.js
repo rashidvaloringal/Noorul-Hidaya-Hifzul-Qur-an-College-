@@ -2,8 +2,8 @@
 // പട്ടാമ്പി നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ് — Optimistic UI + Supabase + Sheet Sync
 // ============================================================================
 
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://pkrxpybdyxidzhektiqh.supabase.co/rest/v1/';
+const SUPABASE_ANON_KEY = 'sb_publishable_f2IT_QXgrjmk_Afqj6BIFg_EjXaflLe';
 const GOOGLE_SHEET_WEBHOOK_URL = '';
 
 const supabaseClient =
