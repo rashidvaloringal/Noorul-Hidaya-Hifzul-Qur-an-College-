@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#053321" />
-  <title>അഡ്മിഷൻ ഡാഷ്‌ബോർഡ് - നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്</title>
+  <title>അഡ്മിൻ ഡാഷ്‌ബോർഡ് - നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്</title>
   <link rel="icon" type="image/svg+xml" href="icon.svg" />
   <link rel="apple-touch-icon" href="icon.svg" />
   <link rel="manifest" href="manifest.json" />
@@ -14,26 +14,53 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    :root { --primary: #053321; --accent: #c48a10; --bg-light: #f4f7f6; }
+    :root { --primary: #053321; --accent: #c48a10; --bg-light: #f4f7f6; --danger: #dc2626; --wa: #16a34a; }
     * { box-sizing: border-box; }
-    body.apply-page { margin: 0; padding: 0; background: var(--bg-light); font-family: 'Noto Sans Malayalam', system-ui, sans-serif; }
-    .top-nav { background: var(--primary); color: white; padding: 13px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
-    .back-btn { color: white; text-decoration: none; font-weight: 700; font-size: 14px; background: rgba(255,255,255,0.15); padding: 8px 14px; border-radius: 6px; display: inline-flex; align-items: center; gap: 8px; }
-    .admin-wrap { max-width: 1080px; margin: 28px auto; padding: 0 16px; }
-    .admin-card { background: #fff; border: 1px solid #e2e8f0; border-top: 6px solid var(--accent); border-radius: 14px; box-shadow: 0 10px 28px rgba(0,0,0,0.08); padding: 24px; }
-    .admin-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; border-bottom: 1px solid #e2e8f0; padding-bottom: 14px; }
+    body.apply-page { margin: 0; padding: 0; background: var(--bg-light); font-family: 'Noto Sans Malayalam', system-ui, sans-serif; color: #0f172a; }
+    .top-nav { background: var(--primary); color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
+    .back-btn { color: white; text-decoration: none; font-weight: 700; font-size: 13.5px; background: rgba(255,255,255,0.15); padding: 8px 13px; border-radius: 6px; display: inline-flex; align-items: center; gap: 7px; border: none; cursor: pointer; font-family: inherit; }
+    .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* Lock Screen */
+    .lock-wrap { min-height: calc(100vh - 70px); display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .lock-card { width: 100%; max-width: 400px; background: #fff; border-radius: 14px; border-top: 6px solid var(--accent); box-shadow: 0 12px 32px rgba(0,0,0,0.1); padding: 28px; text-align: center; }
+    .lock-icon { width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 50%; background: #ecfdf5; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+    .lock-card h2 { margin: 0 0 6px; font-size: 20px; color: var(--primary); }
+    .lock-card p { margin: 0 0 18px; font-size: 13.5px; color: #475569; }
+    .lock-input { width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 16px; font-family: inherit; margin-bottom: 12px; text-align: center; }
+    .lock-btn { width: 100%; background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; }
+    .lock-err { color: var(--danger); font-size: 13px; font-weight: 700; margin-top: 10px; display: none; }
+
+    /* Dashboard */
+    .admin-wrap { max-width: 1160px; margin: 24px auto; padding: 0 14px; display: none; }
+    .admin-card { background: #fff; border: 1px solid #e2e8f0; border-top: 6px solid var(--accent); border-radius: 14px; box-shadow: 0 10px 28px rgba(0,0,0,0.08); padding: 22px; }
+    .admin-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 14px; }
     .admin-head h1 { font-size: 20px; color: var(--primary); margin: 0; font-weight: 700; }
-    .admin-controls { display: flex; gap: 8px; flex-wrap: wrap; }
-    .admin-search { padding: 9px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 14px; min-width: 230px; }
-    .btn-refresh { background: var(--primary); color: #fff; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .admin-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .admin-search { padding: 9px 13px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 14px; min-width: 210px; }
+    .btn-top { border: none; padding: 9px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 13px; color: #fff; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-refresh { background: var(--primary); }
+    .btn-export { background: #0284c7; }
+
+    .tabs-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab-btn { padding: 9px 16px; border-radius: 8px; border: 1.5px solid #cbd5e1; background: #f8fafc; font-weight: 700; font-size: 13.5px; cursor: pointer; font-family: inherit; color: #334155; }
+    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
     .admin-table-wrap { overflow-x: auto; }
-    .admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .admin-table th { background: var(--primary); color: #fff; padding: 11px 12px; text-align: left; }
-    .admin-table td { border-bottom: 1px solid #e2e8f0; padding: 10px 12px; vertical-align: middle; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .admin-table th { background: var(--primary); color: #fff; padding: 11px 10px; text-align: left; white-space: nowrap; }
+    .admin-table td { border-bottom: 1px solid #e2e8f0; padding: 10px; vertical-align: middle; }
     .admin-thumb { width: 42px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1; }
-    .btn-row { background: var(--accent); color: #fff; border: none; padding: 7px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 13px; }
+    .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn-row { color: #fff; border: none; padding: 7px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 12.5px; display: inline-flex; align-items: center; gap: 5px; }
+    .btn-pdf { background: var(--accent); }
+    .btn-wa { background: var(--wa); }
+    .btn-del { background: var(--danger); }
+    .btn-restore { background: #0284c7; }
+    .badge-days { display: inline-block; background: #fef3c7; color: #92400e; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-top: 4px; }
     .admin-empty { text-align: center; padding: 32px; color: #64748b; }
 
+    /* Crisp 2-Page A4 PDF */
     .pdf-hidden-host { position: fixed; left: 0; top: 0; width: 0; height: 0; overflow: hidden; pointer-events: none; }
     #printSection { display: none; background: #ffffff; color: #000000; font-family: 'Noto Sans Malayalam', sans-serif; width: 210mm; }
     #printSection.pdf-capturing { display: block !important; }
@@ -67,10 +94,30 @@
 
   <nav class="top-nav">
     <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> ഹോം പേജ്</a>
-    <a href="apply.html" class="back-btn"><i class="fas fa-pen-to-square"></i> അപേക്ഷാ ഫോം</a>
+    <div style="display:flex; gap:8px;">
+      <a href="apply.html" class="back-btn"><i class="fas fa-pen-to-square"></i> അപേക്ഷാ ഫോം</a>
+      <button type="button" id="logoutBtn" class="back-btn" style="display:none;" onclick="lockAdmin()">
+        <i class="fas fa-lock"></i> ലോക്ക്
+      </button>
+    </div>
   </nav>
 
-  <main class="admin-wrap">
+  <!-- Password Lock Screen -->
+  <section class="lock-wrap" id="lockScreen">
+    <div class="lock-card">
+      <div class="lock-icon"><i class="fas fa-user-shield"></i></div>
+      <h2>അഡ്മിൻ ലോഗിൻ</h2>
+      <p>അപേക്ഷാ വിവരങ്ങൾ കാണാൻ പാസ്സ്‌വേർഡ് നൽകുക</p>
+      <form onsubmit="unlockAdmin(event)">
+        <input type="password" id="adminPassInput" class="lock-input" placeholder="പാസ്സ്‌വേർഡ് നൽകുക" required />
+        <button type="submit" class="lock-btn">പ്രവേശിക്കുക</button>
+        <div class="lock-err" id="lockErr">പാസ്സ്‌വേർഡ് തെറ്റാണ്. വീണ്ടും ശ്രമിക്കുക.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Main Admin Dashboard -->
+  <main class="admin-wrap" id="adminMain">
     <div class="admin-card">
       <div class="admin-head">
         <div>
@@ -79,15 +126,35 @@
         </div>
         <div class="admin-controls">
           <input type="text" id="searchInput" class="admin-search" placeholder="പേര്, ഫോൺ, ജില്ല തിരയുക..." />
-          <button type="button" class="btn-refresh" onclick="loadAdmissions()">
+          <button type="button" class="btn-top btn-export" onclick="exportAllCSV()">
+            <i class="fas fa-file-excel"></i> Excel / CSV ഡൗൺലോഡ്
+          </button>
+          <button type="button" class="btn-top btn-refresh" onclick="loadAdmissions()">
             <i class="fas fa-rotate"></i> റിഫ്രഷ്
           </button>
         </div>
       </div>
+
+      <div class="tabs-bar">
+        <button type="button" id="tabActive" class="tab-btn active" onclick="switchTab('active')">
+          അപേക്ഷകൾ (<span id="countActive">0</span>)
+        </button>
+        <button type="button" id="tabTrash" class="tab-btn" onclick="switchTab('trash')">
+          <i class="fas fa-trash-can"></i> റീസൈക്കിൾ ബിൻ (<span id="countTrash">0</span>)
+        </button>
+      </div>
+
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead>
-            <tr><th>ഫോട്ടോ</th><th>വിദ്യാർഥിയുടെ പേര്</th><th>പിതാവ്</th><th>ഫോൺ / വാട്സ്ആപ്പ്</th><th>ജില്ല</th><th>PDF / പ്രിന്റ്</th></tr>
+            <tr>
+              <th>ഫോട്ടോ</th>
+              <th>വിദ്യാർഥിയുടെ പേര്</th>
+              <th>പിതാവ്</th>
+              <th>ഫോൺ / വാട്സ്ആപ്പ്</th>
+              <th>ജില്ല</th>
+              <th>നടപടികൾ (PDF / WhatsApp / Delete)</th>
+            </tr>
           </thead>
           <tbody id="tableBody">
             <tr><td colspan="6" class="admin-empty">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</td></tr>
@@ -97,6 +164,7 @@
     </div>
   </main>
 
+  <!-- Hidden 2-Page Crisp A4 PDF Template -->
   <div class="pdf-hidden-host">
     <section id="printSection" aria-hidden="true">
       <div class="print-page page-1">
@@ -165,17 +233,76 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     }
-    const FIREBASE_DB_URL = 'https://studio-8213295437-9be7a-default-rtdb.firebaseio.com/admissions.json';
-    let allRows = [];
+
+    // നിങ്ങളുടെ അഡ്മിൻ പാസ്സ്‌വേർഡ് ഇവിടെ മാറ്റാം
+    const ADMIN_PASSWORD = 'nhic@2026';
+    const FIREBASE_BASE = 'https://studio-8213295437-9be7a-default-rtdb.firebaseio.com/admissions';
+    const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
+    let allRecords = [];
+    let currentTab = 'active';
+    const lockScreen = document.getElementById('lockScreen');
+    const adminMain = document.getElementById('adminMain');
+    const logoutBtn = document.getElementById('logoutBtn');
     const tableBody = document.getElementById('tableBody');
     const searchInput = document.getElementById('searchInput');
+
+    if (sessionStorage.getItem('nh_admin_auth') === '1') {
+      showDashboard();
+    }
+
+    function unlockAdmin(e) {
+      e.preventDefault();
+      const val = document.getElementById('adminPassInput').value;
+      if (val === ADMIN_PASSWORD) {
+        sessionStorage.setItem('nh_admin_auth', '1');
+        document.getElementById('lockErr').style.display = 'none';
+        showDashboard();
+      } else {
+        document.getElementById('lockErr').style.display = 'block';
+      }
+    }
+
+    function lockAdmin() {
+      sessionStorage.removeItem('nh_admin_auth');
+      adminMain.style.display = 'none';
+      logoutBtn.style.display = 'none';
+      lockScreen.style.display = 'flex';
+      document.getElementById('adminPassInput').value = '';
+    }
+
+    function showDashboard() {
+      lockScreen.style.display = 'none';
+      adminMain.style.display = 'block';
+      logoutBtn.style.display = 'inline-flex';
+      loadAdmissions();
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('tabActive').classList.toggle('active', tab === 'active');
+      document.getElementById('tabTrash').classList.toggle('active', tab === 'trash');
+      renderTable(searchInput.value);
+    }
 
     async function loadAdmissions() {
       tableBody.innerHTML = '<tr><td colspan="6" class="admin-empty">ലോഡ് ചെയ്യുന്നു...</td></tr>';
       try {
-        const res = await fetch(FIREBASE_DB_URL);
+        const res = await fetch(`${FIREBASE_BASE}.json`);
         const val = await res.json();
-        allRows = val ? Object.values(val).reverse() : [];
+        const rawList = val ? Object.entries(val).map(([id, item]) => ({ id, ...item })) : [];
+
+        // Auto-purge records in Recycle Bin older than 30 days
+        const now = Date.now();
+        const expired = rawList.filter(r => r.deleted && r.deletedAt && (now - new Date(r.deletedAt).getTime() > THIRTY_DAYS_MS));
+        if (expired.length > 0) {
+          await Promise.all(expired.map(r => fetch(`${FIREBASE_BASE}/${r.id}.json`, { method: 'DELETE' })));
+        }
+
+        allRecords = rawList
+          .filter(r => !(r.deleted && r.deletedAt && (now - new Date(r.deletedAt).getTime() > THIRTY_DAYS_MS)))
+          .reverse();
+
         renderTable(searchInput.value);
       } catch (err) {
         tableBody.innerHTML = '<tr><td colspan="6" class="admin-empty">ഡാറ്റ ലോഡ് ചെയ്യാനായില്ല. Firebase Rules പരിശോധിക്കുക.</td></tr>';
@@ -184,26 +311,92 @@
 
     function renderTable(filter = '') {
       const q = filter.toLowerCase();
-      const filtered = allRows.filter(item =>
+      const activeList = allRecords.filter(r => !r.deleted);
+      const trashList = allRecords.filter(r => r.deleted);
+
+      document.getElementById('countActive').innerText = activeList.length;
+      document.getElementById('countTrash').innerText = trashList.length;
+
+      const source = currentTab === 'active' ? activeList : trashList;
+      const filtered = source.filter(item =>
         (item.name || '').toLowerCase().includes(q) ||
         (item.phone || '').includes(q) ||
+        (item.whatsapp || '').includes(q) ||
         (item.district || '').toLowerCase().includes(q)
       );
+
       if (!filtered.length) {
-        tableBody.innerHTML = '<tr><td colspan="6" class="admin-empty">അപേക്ഷകൾ ഒന്നും കണ്ടെത്തിയില്ല.</td></tr>';
+        tableBody.innerHTML = `<tr><td colspan="6" class="admin-empty">${currentTab === 'active' ? 'അപേക്ഷകൾ ഒന്നും കണ്ടെത്തിയില്ല.' : 'റീസൈക്കിൾ ബിൻ ശൂന്യമാണ്.'}</td></tr>`;
         return;
       }
+
       tableBody.innerHTML = '';
       filtered.forEach(item => {
         const tr = document.createElement('tr');
         const imgHtml = item.photoBase64 ? `<img src="${item.photoBase64}" class="admin-thumb" alt="Photo" />` : '-';
-        tr.innerHTML = `<td>${imgHtml}</td><td><b>${item.name || ''}</b><br /><small>${item.house_name || item.houseName || ''}</small></td><td>${item.father_name || item.fatherName || ''}</td><td>${item.phone || ''}<br /><small>WA: ${item.whatsapp || ''}</small></td><td>${item.district || ''}</td><td><button type="button" class="btn-row"><i class="fas fa-file-pdf"></i> PDF ഡൗൺലോഡ്</button></td>`;
-        tr.querySelector('button').addEventListener('click', () => downloadRowPDF(item));
+        let daysBadge = '';
+        if (item.deleted && item.deletedAt) {
+          const daysLeft = Math.max(0, 30 - Math.floor((Date.now() - new Date(item.deletedAt).getTime()) / (24 * 60 * 60 * 1000)));
+          daysBadge = `<div><span class="badge-days">${daysLeft} ദിവസം ബാക്കി</span></div>`;
+        }
+
+        const actionsHtml = currentTab === 'active'
+          ? `<div class="action-group">
+               <button type="button" class="btn-row btn-pdf" data-act="pdf"><i class="fas fa-file-pdf"></i> PDF</button>
+               <button type="button" class="btn-row btn-wa" data-act="wa"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+               <button type="button" class="btn-row btn-del" data-act="trash"><i class="fas fa-trash"></i></button>
+             </div>`
+          : `<div class="action-group">
+               <button type="button" class="btn-row btn-restore" data-act="restore"><i class="fas fa-rotate-left"></i> തിരിച്ചെടുക്കുക</button>
+               <button type="button" class="btn-row btn-del" data-act="purge"><i class="fas fa-trash-can"></i> സ്ഥിരമായി നീക്കുക</button>
+             </div>`;
+
+        tr.innerHTML = `
+          <td>${imgHtml}</td>
+          <td><b>${item.name || ''}</b><br /><small>${item.house_name || item.houseName || ''}</small>${daysBadge}</td>
+          <td>${item.father_name || item.fatherName || ''}</td>
+          <td>${item.phone || ''}<br /><small>WA: ${item.whatsapp || ''}</small></td>
+          <td>${item.district || ''}</td>
+          <td>${actionsHtml}</td>
+        `;
+
+        if (currentTab === 'active') {
+          tr.querySelector('[data-act="pdf"]').addEventListener('click', () => generatePDFBlobAndAction(item, 'download'));
+          tr.querySelector('[data-act="wa"]').addEventListener('click', () => sendToWhatsApp(item));
+          tr.querySelector('[data-act="trash"]').addEventListener('click', () => moveToTrash(item.id));
+        } else {
+          tr.querySelector('[data-act="restore"]').addEventListener('click', () => restoreFromTrash(item.id));
+          tr.querySelector('[data-act="purge"]').addEventListener('click', () => deleteForever(item.id));
+        }
         tableBody.appendChild(tr);
       });
     }
 
-    async function downloadRowPDF(d) {
+    async function moveToTrash(id) {
+      await fetch(`${FIREBASE_BASE}/${id}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deleted: true, deletedAt: new Date().toISOString() })
+      });
+      loadAdmissions();
+    }
+
+    async function restoreFromTrash(id) {
+      await fetch(`${FIREBASE_BASE}/${id}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deleted: false, deletedAt: null })
+      });
+      loadAdmissions();
+    }
+
+    async function deleteForever(id) {
+      if (!confirm('ഈ അപേക്ഷ ഡാറ്റാബേസിൽ നിന്ന് സ്ഥിരമായി ഡിലീറ്റ് ചെയ്യണോ?')) return;
+      await fetch(`${FIREBASE_BASE}/${id}.json`, { method: 'DELETE' });
+      loadAdmissions();
+    }
+
+    function populatePrintDOM(d) {
       document.getElementById('pr_name').innerText = d.name || '';
       document.getElementById('pr_sonName').innerText = d.name || '........................................';
       document.getElementById('pr_house').innerText = d.house_name || d.houseName || '';
@@ -228,25 +421,92 @@
       } else {
         prPhoto.style.display = 'none'; prTxt.style.display = 'block';
       }
+    }
+
+    async function generatePDFBlobAndAction(d, mode) {
+      populatePrintDOM(d);
       const printEl = document.getElementById('printSection');
       printEl.classList.add('pdf-capturing');
       if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      const filename = `${(d.name || 'Admission').trim()}_Admission_Form.pdf`;
+      const opt = {
+        margin: 0,
+        filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, windowWidth: 794, scrollX: 0, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css'] }
+      };
       try {
-        await html2pdf().set({
-          margin: 0,
-          filename: `${(d.name || 'Admission').trim()}_Admission_Form.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, windowWidth: 794, scrollX: 0, scrollY: 0 },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['css'] }
-        }).from(printEl).save();
+        const worker = html2pdf().set(opt).from(printEl);
+        if (mode === 'download') {
+          await worker.save();
+          return null;
+        }
+        return await worker.outputPdf('blob');
       } finally {
         printEl.classList.remove('pdf-capturing');
       }
     }
 
+    async function sendToWhatsApp(d) {
+      const rawNum = String(d.whatsapp || d.phone || '').replace(/\D/g, '');
+      const waNum = rawNum.length === 10 ? '91' + rawNum : rawNum;
+      const fileName = `${(d.name || 'Admission').trim()}_Admission_Form.pdf`;
+      const msgText = `അസ്സലാമു അലൈക്കും,\nനൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്, കൊണ്ടൂർക്കര.\n\nവിദ്യാർഥിയുടെ പേര്: ${d.name || ''}\nപിതാവിന്റെ പേര്: ${d.father_name || d.fatherName || ''}\nനിങ്ങളുടെ അഡ്മിഷൻ അപേക്ഷാ ഫോം PDF ഇതോടൊപ്പം അയക്കുന്നു.`;
+
+      try {
+        const pdfBlob = await generatePDFBlobAndAction(d, 'blob');
+        const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+          await navigator.share({
+            title: fileName,
+            text: msgText,
+            files: [pdfFile]
+          });
+          return;
+        }
+      } catch (_) {}
+
+      // Fallback: PDF ഡൗൺലോഡ് ചെയ്ത് നേരിട്ട് ആ നമ്പറിലേക്ക് WhatsApp തുറക്കുന്നു
+      await generatePDFBlobAndAction(d, 'download');
+      if (waNum) {
+        window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msgText)}`, '_blank');
+      }
+    }
+
+    function exportAllCSV() {
+      const activeList = allRecords.filter(r => !r.deleted);
+      if (!activeList.length) {
+        alert('ഡൗൺലോഡ് ചെയ്യാൻ അപേക്ഷകൾ ഇല്ല.');
+        return;
+      }
+      const headers = [
+        'Timestamp', 'Name', 'House Name', 'Father Name', 'Job',
+        'Mother/Guardian', 'DOB', 'Madrasa Info', 'Samastha Reg',
+        'School Info', 'Address', 'Phone', 'PIN', 'District',
+        'WhatsApp', 'Aadhar', 'ID Marks', 'Samastha Agree'
+      ];
+      const esc = (v) => `"${String(v || '').replace(/"/g, '""')}"`;
+      const rows = activeList.map(r => [
+        r.timestamp, r.name, r.house_name || r.houseName, r.father_name || r.fatherName, r.job,
+        r.mother_name || r.motherName, r.dob, r.madrasa_info || r.madrasaInfo, r.samastha_reg || r.samasthaReg,
+        r.school_info || r.schoolInfo, r.address, r.phone, r.pin, r.district,
+        r.whatsapp, r.aadhar, r.id_marks || r.idMarks, r.samastha_agree || r.samasthaAgree
+      ].map(esc).join(','));
+
+      const csvContent = '\uFEFF' + [headers.map(esc).join(','), ...rows].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `NHIC_Admissions_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
     searchInput.addEventListener('input', () => renderTable(searchInput.value));
-    loadAdmissions();
   </script>
 </body>
 </html>
