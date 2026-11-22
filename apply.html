@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ml">
 <head>
@@ -6,7 +7,7 @@
   <title>അപേക്ഷാ ഫോം - നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -120,37 +121,35 @@
             <input type="number" id="aadhar" class="auto-save" required />
           </div>
           <div class="field-group">
+            <label for="idMarks">15. കുട്ടിയെ തിരിച്ചറിയാനുള്ള 2 അടയാളങ്ങൾ</label>
+            <input type="text" id="idMarks" class="auto-save" placeholder="1. ......................  2. ......................" required />
+          </div>
+
+          <div class="field-group full-width">
             <label for="samasthaAgree">16. രക്ഷിതാവും കുട്ടിയും സമസ്തയെ അംഗീകരിക്കുന്നവരാണോ?</label>
             <select id="samasthaAgree" class="auto-save">
               <option value="അതെ">അതെ</option>
               <option value="അല്ല">അല്ല</option>
             </select>
           </div>
-
-          <div class="field-group full-width">
-            <label for="idMarks">15. കുട്ടിയെ തിരിച്ചറിയാനുള്ള 2 അടയാളങ്ങൾ</label>
-            <input type="text" id="idMarks" class="auto-save" placeholder="1. ......................  2. ......................" required />
-          </div>
         </div>
 
-        <div class="btn-group">
-          <button type="button" class="btn-clear" onclick="clearSavedForm()">
-            <i class="fas fa-trash-alt"></i> ഫോം ക്ലിയർ ചെയ്യുക
-          </button>
-          <button type="button" class="btn-print-bw" onclick="handleDirectPrint()">
-            <i class="fas fa-print"></i> പ്രിന്റ് (B&amp;W)
-          </button>
+        <div class="single-action-wrap">
           <button type="submit" class="btn-submit" id="submitBtn">
             <i class="fas fa-file-pdf"></i> സേവ് ചെയ്യുക &amp; PDF ഡൗൺലോഡ് ചെയ്യുക
           </button>
+          <div class="subtle-reset-wrap">
+            <button type="button" class="subtle-reset-link" onclick="clearSavedForm()">ഫോം പുതുക്കുക (Clear)</button>
+          </div>
         </div>
       </form>
     </div>
   </main>
 
-  <!-- PRINT & PDF SECTION (2 Pages Crisp B&W + Color-Safe A4 Format) -->
-  <section id="printSection">
-    <div class="print-container page-break">
+  <!-- PRINT & PDF SECTION (Exact 2 Pages Crisp B&W A4 Format) -->
+  <section id="printSection" aria-hidden="true">
+    <!-- PAGE 1 -->
+    <div class="print-page page-1">
       <div class="print-page-border">
         <div class="p-header">
           <h2>പട്ടാമ്പി നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്, കൊണ്ടൂർക്കര</h2>
@@ -171,7 +170,7 @@
             <tr><td>2.</td><td>വീട്ടുപേര് :</td><td id="pr_house"></td></tr>
             <tr><td>3.</td><td>പിതാവിൻ്റെ പേര്, ജോലി :</td><td id="pr_father"></td></tr>
             <tr><td>4.</td><td>മാതാവിൻ്റെ പേര്, ബന്ധം, ജോലി :</td><td id="pr_mother"></td></tr>
-            <tr><td>5.</td><td>ജനന തിയ്യതി :</td><td><span id="pr_dob"></span><br /><span id="pr_dobWords" style="font-size:9pt;"></span></td></tr>
+            <tr><td>5.</td><td>ജനന തിയ്യതി :</td><td><span id="pr_dob"></span><br /><span id="pr_dobWords" style="font-size:8.5pt;"></span></td></tr>
             <tr><td>6.</td><td>പഠിച്ച മദ്റസ, ക്ലാസ്സ് :</td><td id="pr_madrasa"></td></tr>
             <tr><td>7.</td><td>സമസ്ത അംഗീകരണ നമ്പർ :</td><td id="pr_samastha"></td></tr>
             <tr><td>8.</td><td>സ്കൂളിൻ്റെ പേര് &amp; ക്ലാസ്സ് :</td><td id="pr_school"></td></tr>
@@ -188,7 +187,8 @@
       </div>
     </div>
 
-    <div class="print-container">
+    <!-- PAGE 2 -->
+    <div class="print-page page-2">
       <div class="print-page-border">
         <div class="declaration-text">
           ഞാൻ സമസ്ത കേരള ജംഇയ്യത്തുൽ ഉലമായുടെയും അതിന്റെ കീഴ്ഘടകങ്ങളുടെയും ആശയാദർശങ്ങളിൽ അടിയുറച്ചു വിശ്വസിക്കുന്നവനും അത് അനുസരിച്ച് പ്രവർത്തിക്കുന്നവനുമാണ്. നൂറുൽ ഹിദായ ഇസ്ലാമിക് സെൻ്ററിന് കീഴിൽ പ്രവർത്തിക്കുന്ന നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജിൻ്റെ എല്ലാ നിയമങ്ങളും നിർദ്ദേശങ്ങളും അനുസരിച്ച് പ്രവർത്തിക്കുവാൻ ഞാൻ സന്നദ്ധനാണെന്ന് ഇതിനാൽ ബോധ്യപ്പെടുത്തുന്നു.
@@ -222,3 +222,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+```
