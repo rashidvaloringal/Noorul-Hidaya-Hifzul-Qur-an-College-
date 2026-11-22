@@ -1,9 +1,10 @@
+```javascript
 // ============================================================================
-// പട്ടാമ്പി നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ് — Optimistic UI + Supabase + Sheet Sync
+// പട്ടാമ്പി നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ് — Optimistic UI + Supabase + PDF
 // ============================================================================
 
-const SUPABASE_URL = 'https://pkrxpybdyxidzhektiqh.supabase.co/rest/v1/';
-const SUPABASE_ANON_KEY = 'sb_publishable_f2IT_QXgrjmk_Afqj6BIFg_EjXaflLe';
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 const GOOGLE_SHEET_WEBHOOK_URL = '';
 
 const supabaseClient =
@@ -142,54 +143,63 @@ function fillPrintLayout(data) {
   document.getElementById('pr_agree').innerText = data.samastha_agree;
 }
 
-function handleDirectPrint() {
-  fillPrintLayout(collectFormData());
-  window.print();
-}
-
 async function handleInstantSubmit(event) {
   event.preventDefault();
   if (saveStatus) saveStatus.innerText = '⚡ PDF തയ്യാറാക്കുന്നു & സേവ് ചെയ്യുന്നു...';
 
   const formData = collectFormData();
   fillPrintLayout(formData);
-  downloadInstantPDF(formData.name || 'Admission');
+  await downloadInstantPDF(formData.name || 'Admission');
   saveToBackendsFast(formData, selectedPhotoFile);
 }
 
-function downloadInstantPDF(studentName) {
+async function downloadInstantPDF(studentName) {
   const printEl = document.getElementById('printSection');
-  printEl.style.display = 'block';
+  printEl.classList.add('pdf-capturing');
+
+  if (document.fonts && document.fonts.ready) {
+    await document.fonts.ready;
+  }
 
   const opt = {
     margin: 0,
-    filename: `${studentName}_Admission_Form.pdf`,
-    image: { type: 'jpeg', quality: 0.96 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    filename: `${studentName.trim()}_Admission_Form.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      scrollX: 0,
+      scrollY: 0
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css'] }
   };
 
-  html2pdf().set(opt).from(printEl).save().then(() => {
-    printEl.style.display = 'none';
-  });
+  try {
+    await html2pdf().set(opt).from(printEl).save();
+  } finally {
+    printEl.classList.remove('pdf-capturing');
+  }
 }
 
 async function saveToBackendsFast(data, photoFile) {
   try {
     if (supabaseClient) {
       if (photoFile) {
-        const fileExt = photoFile.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-        const { error: uploadError } = await supabaseClient.storage
-          .from('student-photos')
-          .upload(fileName, photoFile);
-
-        if (!uploadError) {
-          const { data: publicUrlData } = supabaseClient.storage
+        try {
+          const fileExt = photoFile.name.split('.').pop();
+          const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+          const { error: uploadError } = await supabaseClient.storage
             .from('student-photos')
-            .getPublicUrl(fileName);
-          data.photo_url = publicUrlData.publicUrl;
-        }
+            .upload(fileName, photoFile);
+
+          if (!uploadError) {
+            const { data: publicUrlData } = supabaseClient.storage
+              .from('student-photos')
+              .getPublicUrl(fileName);
+            data.photo_url = publicUrlData.publicUrl;
+          }
+        } catch (_) {}
       }
 
       const { error } = await supabaseClient.from('admissions').insert([data]);
@@ -211,11 +221,13 @@ async function saveToBackendsFast(data, photoFile) {
         : '✅ PDF തയ്യാറായി (ഫോണിൽ സേവ് ചെയ്തു)';
     }
   } catch (err) {
-    console.warn('Offline mode - saving to queue:', err);
+    console.warn('Sync error / offline mode:', err);
     const pending = JSON.parse(localStorage.getItem('nh_pending_sync') || '[]');
     pending.push(data);
     localStorage.setItem('nh_pending_sync', JSON.stringify(pending));
-    if (saveStatus) saveStatus.innerText = '⚠️ നെറ്റ് സ്ലോ ആണ് - ഫോണിൽ സേവ് ചെയ്തു, നെറ്റ് കിട്ടുമ്പോൾ അപ്ലോഡ് ആകും';
+    if (saveStatus) {
+      saveStatus.innerText = '⚠️ നെറ്റ് സ്ലോ ആണ് – ഫോണിൽ സേവ് ചെയ്തു, നെറ്റ് കിട്ടുമ്പോൾ അപ്ലോഡ് ആകും';
+    }
   }
 }
 
@@ -232,3 +244,4 @@ async function syncPendingOfflineData() {
     }
   }
 }
+```
