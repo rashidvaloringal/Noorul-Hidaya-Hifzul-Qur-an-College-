@@ -1,0 +1,20 @@
+{
+  "name": "നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്",
+  "short_name": "നൂറുൽ ഹിദായ",
+  "description": "പട്ടാമ്പി നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ് - വെബ്‌സൈറ്റും ഓൺലൈൻ അഡ്മിഷൻ പോർട്ടലും",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#053321",
+  "theme_color": "#053321",
+  "lang": "ml",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

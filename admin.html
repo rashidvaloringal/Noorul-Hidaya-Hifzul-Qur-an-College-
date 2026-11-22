@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#053321" />
+  <title>അഡ്മിഷൻ ഡാഷ്‌ബോർഡ് - നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root { --primary: #053321; --accent: #c48a10; --bg-light: #f4f7f6; }
+    * { box-sizing: border-box; }
+    body.apply-page { margin: 0; padding: 0; background: var(--bg-light); font-family: 'Noto Sans Malayalam', system-ui, sans-serif; }
+    .top-nav { background: var(--primary); color: white; padding: 13px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+    .back-btn { color: white; text-decoration: none; font-weight: 700; font-size: 14px; background: rgba(255,255,255,0.15); padding: 8px 14px; border-radius: 6px; display: inline-flex; align-items: center; gap: 8px; }
+    .admin-wrap { max-width: 1080px; margin: 28px auto; padding: 0 16px; }
+    .admin-card { background: #fff; border: 1px solid #e2e8f0; border-top: 6px solid var(--accent); border-radius: 14px; box-shadow: 0 10px 28px rgba(0,0,0,0.08); padding: 24px; }
+    .admin-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; border-bottom: 1px solid #e2e8f0; padding-bottom: 14px; }
+    .admin-head h1 { font-size: 20px; color: var(--primary); margin: 0; font-weight: 700; }
+    .admin-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+    .admin-search { padding: 9px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 14px; min-width: 230px; }
+    .btn-refresh { background: var(--primary); color: #fff; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .admin-table-wrap { overflow-x: auto; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .admin-table th { background: var(--primary); color: #fff; padding: 11px 12px; text-align: left; }
+    .admin-table td { border-bottom: 1px solid #e2e8f0; padding: 10px 12px; vertical-align: middle; }
+    .admin-thumb { width: 42px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1; }
+    .btn-row { background: var(--accent); color: #fff; border: none; padding: 7px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 13px; }
+    .admin-empty { text-align: center; padding: 32px; color: #64748b; }
+
+    .pdf-hidden-host { position: fixed; left: 0; top: 0; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+    #printSection { display: none; background: #ffffff; color: #000000; font-family: 'Noto Sans Malayalam', sans-serif; width: 210mm; }
+    #printSection.pdf-capturing { display: block !important; }
+    .print-page { width: 210mm; height: 294mm; padding: 8mm 12mm; margin: 0 auto; background: #fff; color: #000; box-sizing: border-box; overflow: hidden; }
+    .page-1 { page-break-after: always; break-after: page; }
+    .print-page-border { border: 1.5px solid #000; padding: 7mm 9mm; height: 276mm; box-sizing: border-box; }
+    .p-header { text-align: center; margin-bottom: 6px; }
+    .p-header h2 { font-size: 14pt; margin: 0 0 4px; line-height: 1.35; font-weight: 700; }
+    .p-header p { font-size: 9pt; margin: 0; line-height: 1.4; }
+    .p-hr { border: 0; border-top: 2px solid #000; border-bottom: 1px solid #000; height: 4px; margin: 6px 0 8px; }
+    .app-form-title { text-align: center; font-size: 12pt; font-weight: 700; margin: 4px 0 8px; text-decoration: underline; }
+    .form-details-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .form-table-col { flex: 1; min-width: 0; }
+    .photo-box { width: 30mm; height: 36mm; border: 1.2px solid #000; display: flex; align-items: center; justify-content: center; flex-direction: column; flex-shrink: 0; margin-top: 20px; overflow: hidden; font-size: 9pt; }
+    .photo-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .form-no-line { font-size: 10pt; font-weight: 700; margin: 2px 0 6px; }
+    .p-table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 9.2pt; line-height: 1.45; }
+    .p-table td { border: 1px solid #000; padding: 4.5px 7px; vertical-align: top; word-break: break-word; }
+    .p-table td:first-child { width: 30px; text-align: center; font-weight: 700; }
+    .p-table td:nth-child(2) { width: 42%; font-weight: 700; }
+    .declaration-text { font-size: 10.5pt; line-height: 1.85; text-align: left; }
+    .signature-line { display: inline-block; border-bottom: 1px dotted #000; min-width: 165px; margin-left: 4px; min-height: 14px; }
+    .guardian-signature { text-align: right; margin-top: 28px; font-size: 10.5pt; font-weight: 700; }
+    .attestation-section { margin-top: 24px; border: 1.2px solid #000; padding: 12px 14px; font-size: 10pt; line-height: 1.8; }
+    .office-use-section { margin-top: 28px; font-size: 10.5pt; }
+    .office-use-header { font-weight: 700; border-top: 1.5px solid #000; border-bottom: 1px solid #000; padding: 6px 0; text-align: center; margin-bottom: 16px; }
+    .office-field-row { display: flex; justify-content: space-between; gap: 16px; margin-top: 14px; }
+  </style>
+</head>
+<body class="apply-page">
+
+  <nav class="top-nav">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> ഹോം പേജ്</a>
+    <a href="apply.html" class="back-btn"><i class="fas fa-pen-to-square"></i> അപേക്ഷാ ഫോം</a>
+  </nav>
+
+  <main class="admin-wrap">
+    <div class="admin-card">
+      <div class="admin-head">
+        <div>
+          <h1>അപേക്ഷാ ലിസ്റ്റ് (Firebase Realtime DB)</h1>
+          <small style="color:#475569;">പട്ടാമ്പി നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്</small>
+        </div>
+        <div class="admin-controls">
+          <input type="text" id="searchInput" class="admin-search" placeholder="പേര്, ഫോൺ, ജില്ല തിരയുക..." />
+          <button type="button" class="btn-refresh" onclick="loadAdmissions()">
+            <i class="fas fa-rotate"></i> റിഫ്രഷ്
+          </button>
+        </div>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>ഫോട്ടോ</th><th>വിദ്യാർഥിയുടെ പേര്</th><th>പിതാവ്</th><th>ഫോൺ / വാട്സ്ആപ്പ്</th><th>ജില്ല</th><th>PDF / പ്രിന്റ്</th></tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="6" class="admin-empty">വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <div class="pdf-hidden-host">
+    <section id="printSection" aria-hidden="true">
+      <div class="print-page page-1">
+        <div class="print-page-border">
+          <div class="p-header">
+            <h2>പട്ടാമ്പി നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്, കൊണ്ടൂർക്കര</h2>
+            <p>Run by : പട്ടാമ്പി നൂറുൽ ഹിദായ ഇസ്ലാമിക് സെൻ്റർ, അമാനത്ത് നഗർ P.O. കൊണ്ടൂർക്കര Ph: 0466 2233393, 9447973393</p>
+          </div>
+          <hr class="p-hr" />
+          <div class="app-form-title">അപ്ലിക്കേഷൻ ഫോം (APPLICATION)</div>
+          <div class="form-details-flex">
+            <div class="form-table-col">
+              <div class="form-no-line">Form No: <span class="signature-line" style="min-width: 100px;"></span></div>
+              <table class="p-table">
+                <tr><td>1.</td><td>വിദ്യാർഥിയുടെ പേര് :</td><td id="pr_name"></td></tr>
+                <tr><td>2.</td><td>വീട്ടുപേര് :</td><td id="pr_house"></td></tr>
+                <tr><td>3.</td><td>പിതാവിൻ്റെ പേര്, ജോലി :</td><td id="pr_father"></td></tr>
+                <tr><td>4.</td><td>മാതാവിൻ്റെ പേര്, ബന്ധം, ജോലി :</td><td id="pr_mother"></td></tr>
+                <tr><td>5.</td><td>ജനന തിയ്യതി :</td><td><span id="pr_dob"></span><br /><span style="font-size:8pt;">(അക്കത്തിലും അക്ഷരത്തിലും)</span></td></tr>
+                <tr><td>6.</td><td>പഠിച്ച മദ്റസ, ക്ലാസ്സ് :</td><td id="pr_madrasa"></td></tr>
+                <tr><td>7.</td><td>സമസ്ത അംഗീകരണ നമ്പർ :</td><td id="pr_samastha"></td></tr>
+                <tr><td>8.</td><td>സ്കൂളിൻ്റെ പേര് &amp; ക്ലാസ്സ് :</td><td id="pr_school"></td></tr>
+                <tr><td>9.</td><td>പോസ്റ്റൽ അഡ്രസ്സ് :</td><td id="pr_address"></td></tr>
+                <tr><td>10.</td><td>ഫോൺ നമ്പർ :</td><td id="pr_phone"></td></tr>
+                <tr><td>11.</td><td>പിൻ നമ്പർ :</td><td id="pr_pin"></td></tr>
+                <tr><td>12.</td><td>ജില്ല :</td><td id="pr_district"></td></tr>
+                <tr><td>13.</td><td>വാട്സ്ആപ്പ് നമ്പർ :</td><td id="pr_whatsapp"></td></tr>
+                <tr><td>14.</td><td>ആധാർ നമ്പർ :</td><td id="pr_aadhar"></td></tr>
+                <tr><td>15.</td><td>തിരിച്ചറിയാനുള്ള 2 അടയാളങ്ങൾ :</td><td id="pr_marks"></td></tr>
+                <tr><td>16.</td><td>സമസ്തയെ അംഗീകരിക്കുന്നവരാണോ?</td><td id="pr_agree"></td></tr>
+              </table>
+            </div>
+            <div class="photo-box"><img id="pr_photo" src="" alt="" /><span id="pr_photo_text">(ഫോട്ടോ)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="print-page page-2">
+        <div class="print-page-border">
+          <div class="declaration-text">
+            ഞാൻ സമസ്ത കേരള ജംഇയ്യത്തുൽ ഉലമായുടെയും അതിന്റെ കീഴ്ഘടകങ്ങളുടെയും ആശയാദർശങ്ങളിൽ അടിയുറച്ചു വിശ്വസിക്കുന്നവനും അത് അനുസരിച്ച് പ്രവർത്തിക്കുന്നവനുമാണ്. നൂറുൽ ഹിദായ ഇസ്ലാമിക് സെൻ്ററിന് കീഴിൽ പ്രവർത്തിക്കുന്ന നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജിൻ്റെ എല്ലാ നിയമങ്ങളും നിർദ്ദേശങ്ങളും അനുസരിച്ച് പ്രവർത്തിക്കുവാൻ ഞാൻ സന്നദ്ധനാണെന്ന് ഇതിനാൽ ബോധ്യപ്പെടുത്തുന്നു.
+            <br /><br />
+            എൻ്റെ മകൻ <b id="pr_sonName">........................................</b> എന്ന കുട്ടിയെ നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജിൽ ചേർക്കുവാൻ അപേക്ഷിച്ചുകൊള്ളുന്നു.
+            <br /><br />
+            <div class="guardian-signature">പിതാവിൻ്റെ/രക്ഷിതാവിൻ്റെ പേരും ഒപ്പും <span class="signature-line" style="min-width: 240px;"></span></div>
+          </div>
+          <div class="attestation-section">
+            <p style="margin-top:0;">മുകളിൽ എഴുതിയ വിവരങ്ങളെല്ലാം ശരിയാണെന്നും സ്ഥാപനത്തിൻ്റെ നിയമനിർദ്ദേശങ്ങളും അനുസരിച്ച് പ്രവർത്തിക്കുന്ന ആളാണെന്നും എനിക്ക് വ്യക്തമായി ബോധ്യപ്പെട്ടതനുസരിച്ച് ഞാൻ സാക്ഷ്യപ്പെടുത്തുന്നു.</p>
+            <div style="margin-bottom: 12px;">പേര് <span class="signature-line" style="min-width: 190px;"></span> ഒപ്പ് <span class="signature-line" style="min-width: 140px;"></span></div>
+            <div style="margin-bottom: 12px;">സ്ഥാനം <span class="signature-line" style="min-width: 180px;"></span> മൊബൈൽ നമ്പർ <span class="signature-line" style="min-width: 160px;"></span></div>
+            <p style="font-size: 9pt; margin-top: 14px; margin-bottom:0;">*സമസ്തയുടെയും കീഴ്ഘടകങ്ങളുടെയും ശാഖ/പഞ്ചായത്ത്/മേഖല/ജില്ലാ ഭാരവാഹികൾ/ SKIMVB മുഫത്തിശുമാർ എന്നിവരിൽ ആരെങ്കിലും മാത്രമേ സാക്ഷ്യപ്പെടുത്താൻ പാടുള്ളൂ.</p>
+          </div>
+          <div class="office-use-section">
+            <div class="office-use-header">ഓഫീസ് ആവശ്യത്തിന് മാത്രം</div>
+            <div class="office-field-row">
+              <div>അഡ്മിഷൻ നൽകി/ നിരസിച്ചു <span class="signature-line" style="min-width: 130px;"></span></div>
+              <div>അഡ്മിഷൻ നമ്പർ <span class="signature-line" style="min-width: 130px;"></span></div>
+            </div>
+            <div style="text-align: right; margin-top: 56px; font-weight:700;">പ്രിൻസിപ്പൽ (ഒപ്പ്)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+    const FIREBASE_DB_URL = 'https://studio-8213295437-9be7a-default-rtdb.firebaseio.com/admissions.json';
+    let allRows = [];
+    const tableBody = document.getElementById('tableBody');
+    const searchInput = document.getElementById('searchInput');
+
+    async function loadAdmissions() {
+      tableBody.innerHTML = '<tr><td colspan="6" class="admin-empty">ലോഡ് ചെയ്യുന്നു...</td></tr>';
+      try {
+        const res = await fetch(FIREBASE_DB_URL);
+        const val = await res.json();
+        allRows = val ? Object.values(val).reverse() : [];
+        renderTable(searchInput.value);
+      } catch (err) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="admin-empty">ഡാറ്റ ലോഡ് ചെയ്യാനായില്ല. Firebase Rules പരിശോധിക്കുക.</td></tr>';
+      }
+    }
+
+    function renderTable(filter = '') {
+      const q = filter.toLowerCase();
+      const filtered = allRows.filter(item =>
+        (item.name || '').toLowerCase().includes(q) ||
+        (item.phone || '').includes(q) ||
+        (item.district || '').toLowerCase().includes(q)
+      );
+      if (!filtered.length) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="admin-empty">അപേക്ഷകൾ ഒന്നും കണ്ടെത്തിയില്ല.</td></tr>';
+        return;
+      }
+      tableBody.innerHTML = '';
+      filtered.forEach(item => {
+        const tr = document.createElement('tr');
+        const imgHtml = item.photoBase64 ? `<img src="${item.photoBase64}" class="admin-thumb" alt="Photo" />` : '-';
+        tr.innerHTML = `<td>${imgHtml}</td><td><b>${item.name || ''}</b><br /><small>${item.house_name || item.houseName || ''}</small></td><td>${item.father_name || item.fatherName || ''}</td><td>${item.phone || ''}<br /><small>WA: ${item.whatsapp || ''}</small></td><td>${item.district || ''}</td><td><button type="button" class="btn-row"><i class="fas fa-file-pdf"></i> PDF ഡൗൺലോഡ്</button></td>`;
+        tr.querySelector('button').addEventListener('click', () => downloadRowPDF(item));
+        tableBody.appendChild(tr);
+      });
+    }
+
+    async function downloadRowPDF(d) {
+      document.getElementById('pr_name').innerText = d.name || '';
+      document.getElementById('pr_sonName').innerText = d.name || '........................................';
+      document.getElementById('pr_house').innerText = d.house_name || d.houseName || '';
+      document.getElementById('pr_father').innerText = [d.father_name || d.fatherName, d.job].filter(Boolean).join(', ');
+      document.getElementById('pr_mother').innerText = d.mother_name || d.motherName || '';
+      document.getElementById('pr_dob').innerText = d.dob || '';
+      document.getElementById('pr_madrasa').innerText = d.madrasa_info || d.madrasaInfo || '';
+      document.getElementById('pr_samastha').innerText = d.samastha_reg || d.samasthaReg || '-';
+      document.getElementById('pr_school').innerText = d.school_info || d.schoolInfo || '';
+      document.getElementById('pr_address').innerText = d.address || '';
+      document.getElementById('pr_phone').innerText = d.phone || '';
+      document.getElementById('pr_pin').innerText = d.pin || '';
+      document.getElementById('pr_district').innerText = d.district || '';
+      document.getElementById('pr_whatsapp').innerText = d.whatsapp || '';
+      document.getElementById('pr_aadhar').innerText = d.aadhar || '';
+      document.getElementById('pr_marks').innerText = d.id_marks || d.idMarks || '';
+      document.getElementById('pr_agree').innerText = d.samastha_agree || d.samasthaAgree || '';
+      const prPhoto = document.getElementById('pr_photo');
+      const prTxt = document.getElementById('pr_photo_text');
+      if (d.photoBase64) {
+        prPhoto.src = d.photoBase64; prPhoto.style.display = 'block'; prTxt.style.display = 'none';
+      } else {
+        prPhoto.style.display = 'none'; prTxt.style.display = 'block';
+      }
+      const printEl = document.getElementById('printSection');
+      printEl.classList.add('pdf-capturing');
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      try {
+        await html2pdf().set({
+          margin: 0,
+          filename: `${(d.name || 'Admission').trim()}_Admission_Form.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, windowWidth: 794, scrollX: 0, scrollY: 0 },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css'] }
+        }).from(printEl).save();
+      } finally {
+        printEl.classList.remove('pdf-capturing');
+      }
+    }
+
+    searchInput.addEventListener('input', () => renderTable(searchInput.value));
+    loadAdmissions();
+  </script>
+</body>
+</html>

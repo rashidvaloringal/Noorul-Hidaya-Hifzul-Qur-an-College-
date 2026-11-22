@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#053321"/>
+      <stop offset="100%" stop-color="#0b6b4f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="24" y="24" width="464" height="464" rx="92" fill="none" stroke="#c48a10" stroke-width="10" stroke-opacity="0.85"/>
+  <!-- Open Book / Quran Emblem -->
+  <path d="M256 175 C215 150, 150 150, 112 172 L112 344 C150 324, 215 324, 256 352 C297 324, 362 324, 400 344 L400 172 C362 150, 297 150, 256 175 Z" fill="#ffffff" opacity="0.96"/>
+  <path d="M256 175 L256 352" stroke="#053321" stroke-width="8" stroke-linecap="round"/>
+  <path d="M144 210 L224 210 M144 242 L224 242 M144 274 L210 274" stroke="#c48a10" stroke-width="10" stroke-linecap="round"/>
+  <path d="M288 210 L368 210 M288 242 L368 242 M302 274 L368 274" stroke="#c48a10" stroke-width="10" stroke-linecap="round"/>
+  <!-- Crescent & Star Accent -->
+  <circle cx="256" cy="108" r="26" fill="#c48a10"/>
+  <circle cx="266" cy="102" r="21" fill="#063e28"/>
+</svg>
