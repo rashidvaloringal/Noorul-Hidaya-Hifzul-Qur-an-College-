@@ -21,7 +21,6 @@
     .back-btn { color: white; text-decoration: none; font-weight: 700; font-size: 13.5px; background: rgba(255,255,255,0.15); padding: 8px 13px; border-radius: 6px; display: inline-flex; align-items: center; gap: 7px; border: none; cursor: pointer; font-family: inherit; }
     .back-btn:hover { background: rgba(255,255,255,0.25); }
 
-    /* Lock Screen */
     .lock-wrap { min-height: calc(100vh - 70px); display: flex; align-items: center; justify-content: center; padding: 20px; }
     .lock-card { width: 100%; max-width: 400px; background: #fff; border-radius: 14px; border-top: 6px solid var(--accent); box-shadow: 0 12px 32px rgba(0,0,0,0.1); padding: 28px; text-align: center; }
     .lock-icon { width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 50%; background: #ecfdf5; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
@@ -31,7 +30,6 @@
     .lock-btn { width: 100%; background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; }
     .lock-err { color: var(--danger); font-size: 13px; font-weight: 700; margin-top: 10px; display: none; }
 
-    /* Dashboard */
     .admin-wrap { max-width: 1160px; margin: 24px auto; padding: 0 14px; display: none; }
     .admin-card { background: #fff; border: 1px solid #e2e8f0; border-top: 6px solid var(--accent); border-radius: 14px; box-shadow: 0 10px 28px rgba(0,0,0,0.08); padding: 22px; }
     .admin-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 14px; }
@@ -59,6 +57,20 @@
     .btn-restore { background: #0284c7; }
     .badge-days { display: inline-block; background: #fef3c7; color: #92400e; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-top: 4px; }
     .admin-empty { text-align: center; padding: 32px; color: #64748b; }
+
+    /* WhatsApp Composer Modal */
+    .wa-modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 1200; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .wa-modal-backdrop.open { display: flex; }
+    .wa-modal { width: 100%; max-width: 540px; background: #fff; border-radius: 14px; border-top: 6px solid var(--wa); box-shadow: 0 20px 50px rgba(0,0,0,0.25); padding: 22px; }
+    .wa-modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .wa-modal-head h3 { margin: 0; font-size: 17px; color: var(--primary); }
+    .wa-close { background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; }
+    .wa-label { display: block; font-size: 13px; font-weight: 700; color: #334155; margin: 10px 0 5px; }
+    .wa-input, .wa-textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 14px; }
+    .wa-textarea { min-height: 145px; line-height: 1.6; resize: vertical; }
+    .wa-link-preview { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; font-size: 12px; color: #475569; word-break: break-all; max-height: 70px; overflow-y: auto; margin-top: 6px; }
+    .wa-modal-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .wa-btn-main { flex: 1; min-width: 140px; border: none; padding: 11px 14px; border-radius: 8px; color: #fff; font-weight: 700; font-size: 13.5px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
 
     /* Crisp 2-Page A4 PDF */
     .pdf-hidden-host { position: fixed; left: 0; top: 0; width: 0; height: 0; overflow: hidden; pointer-events: none; }
@@ -164,6 +176,37 @@
     </div>
   </main>
 
+  <!-- WhatsApp Message & Link Converter Modal -->
+  <div class="wa-modal-backdrop" id="waModal">
+    <div class="wa-modal">
+      <div class="wa-modal-head">
+        <h3><i class="fab fa-whatsapp" style="color:#16a34a;"></i> WhatsApp മെസ്സേജ് അയക്കുക</h3>
+        <button type="button" class="wa-close" onclick="closeWaModal()">✕</button>
+      </div>
+
+      <label class="wa-label" for="waPhoneInput">WhatsApp നമ്പർ (91 ഉൾപ്പെടെ):</label>
+      <input type="text" id="waPhoneInput" class="wa-input" oninput="updateWaLinkPreview()" />
+
+      <label class="wa-label" for="waMessageInput">മെസ്സേജ് (ആവശ്യമായ മാറ്റങ്ങൾ ഇവിടെ വരുത്താം):</label>
+      <textarea id="waMessageInput" class="wa-textarea" oninput="updateWaLinkPreview()"></textarea>
+
+      <label class="wa-label">തയ്യാറായ wa.me ലിങ്ക്:</label>
+      <div class="wa-link-preview" id="waLinkPreview"></div>
+
+      <div class="wa-modal-actions">
+        <a id="waOpenBtn" href="#" target="_blank" rel="noopener noreferrer" class="wa-btn-main" style="background:#16a34a;">
+          <i class="fab fa-whatsapp"></i> WhatsApp തുറക്കുക
+        </a>
+        <button type="button" class="wa-btn-main" style="background:#c48a10;" onclick="sharePdfToWa()">
+          <i class="fas fa-file-pdf"></i> PDF + WhatsApp ഷെയർ
+        </button>
+        <button type="button" class="wa-btn-main" style="background:#334155;" onclick="copyWaLink()">
+          <i class="fas fa-copy"></i> ലിങ്ക് കോപ്പി
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Hidden 2-Page Crisp A4 PDF Template -->
   <div class="pdf-hidden-host">
     <section id="printSection" aria-hidden="true">
@@ -241,6 +284,7 @@
 
     let allRecords = [];
     let currentTab = 'active';
+    let activeWaRecord = null;
     const lockScreen = document.getElementById('lockScreen');
     const adminMain = document.getElementById('adminMain');
     const logoutBtn = document.getElementById('logoutBtn');
@@ -292,7 +336,6 @@
         const val = await res.json();
         const rawList = val ? Object.entries(val).map(([id, item]) => ({ id, ...item })) : [];
 
-        // Auto-purge records in Recycle Bin older than 30 days
         const now = Date.now();
         const expired = rawList.filter(r => r.deleted && r.deletedAt && (now - new Date(r.deletedAt).getTime() > THIRTY_DAYS_MS));
         if (expired.length > 0) {
@@ -362,7 +405,7 @@
 
         if (currentTab === 'active') {
           tr.querySelector('[data-act="pdf"]').addEventListener('click', () => generatePDFBlobAndAction(item, 'download'));
-          tr.querySelector('[data-act="wa"]').addEventListener('click', () => sendToWhatsApp(item));
+          tr.querySelector('[data-act="wa"]').addEventListener('click', () => openWaModal(item));
           tr.querySelector('[data-act="trash"]').addEventListener('click', () => moveToTrash(item.id));
         } else {
           tr.querySelector('[data-act="restore"]').addEventListener('click', () => restoreFromTrash(item.id));
@@ -370,6 +413,60 @@
         }
         tableBody.appendChild(tr);
       });
+    }
+
+    function openWaModal(d) {
+      activeWaRecord = d;
+      const rawNum = String(d.whatsapp || d.phone || '').replace(/\D/g, '');
+      const waNum = rawNum.length === 10 ? '91' + rawNum : rawNum;
+      const applyUrl = `${window.location.origin}/apply.html`;
+      const defaultMsg =
+`السلام علیکم ورحمۃ اللہ وبرکاتہ
+നൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്.
+${d.name || ''} യുടെ അഡ്മിഷൻ ഫോം ഇതിനോടൊപ്പം അയക്കുന്നു. ഇത് പ്രിൻ്റ് എടുക്കുകയും അപേക്ഷാ ഫീ ഓഫീസിൽ ഏൽപ്പിക്കുകയും ചെയ്യേണ്ടതാണ്. വിവരങ്ങളിൽ എന്തെങ്കിലും തിരുത്ത് വേണമെങ്കിൽ താഴെ കാണുന്ന ലിങ്കിൽ പോയി മാറ്റാവുന്നതും ഡൗൺലോഡ് ചെയ്യാവുന്നതുമാണ്:
+${applyUrl}`;
+
+      document.getElementById('waPhoneInput').value = waNum;
+      document.getElementById('waMessageInput').value = defaultMsg;
+      updateWaLinkPreview();
+      document.getElementById('waModal').classList.add('open');
+    }
+
+    function closeWaModal() {
+      document.getElementById('waModal').classList.remove('open');
+    }
+
+    function updateWaLinkPreview() {
+      const phone = document.getElementById('waPhoneInput').value.replace(/\D/g, '');
+      const msg = document.getElementById('waMessageInput').value;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      document.getElementById('waLinkPreview').innerText = url;
+      document.getElementById('waOpenBtn').href = url;
+      return url;
+    }
+
+    function copyWaLink() {
+      const url = updateWaLinkPreview();
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+      }
+      alert('WhatsApp ലിങ്ക് കോപ്പി ചെയ്തു!');
+    }
+
+    async function sharePdfToWa() {
+      if (!activeWaRecord) return;
+      const fileName = `${(activeWaRecord.name || 'Admission').trim()}_Admission_Form.pdf`;
+      const msg = document.getElementById('waMessageInput').value;
+      try {
+        const pdfBlob = await generatePDFBlobAndAction(activeWaRecord, 'blob');
+        const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+          await navigator.share({ title: fileName, text: msg, files: [pdfFile] });
+          return;
+        }
+      } catch (_) {}
+      await generatePDFBlobAndAction(activeWaRecord, 'download');
+      window.open(updateWaLinkPreview(), '_blank');
     }
 
     async function moveToTrash(id) {
@@ -446,33 +543,6 @@
         return await worker.outputPdf('blob');
       } finally {
         printEl.classList.remove('pdf-capturing');
-      }
-    }
-
-    async function sendToWhatsApp(d) {
-      const rawNum = String(d.whatsapp || d.phone || '').replace(/\D/g, '');
-      const waNum = rawNum.length === 10 ? '91' + rawNum : rawNum;
-      const fileName = `${(d.name || 'Admission').trim()}_Admission_Form.pdf`;
-      const msgText = `അസ്സലാമു അലൈക്കും,\nനൂറുൽ ഹിദായ ഹിഫ്ളുൽ ഖുർആൻ കോളേജ്, കൊണ്ടൂർക്കര.\n\nവിദ്യാർഥിയുടെ പേര്: ${d.name || ''}\nപിതാവിന്റെ പേര്: ${d.father_name || d.fatherName || ''}\nനിങ്ങളുടെ അഡ്മിഷൻ അപേക്ഷാ ഫോം PDF ഇതോടൊപ്പം അയക്കുന്നു.`;
-
-      try {
-        const pdfBlob = await generatePDFBlobAndAction(d, 'blob');
-        const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
-
-        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-          await navigator.share({
-            title: fileName,
-            text: msgText,
-            files: [pdfFile]
-          });
-          return;
-        }
-      } catch (_) {}
-
-      // Fallback: PDF ഡൗൺലോഡ് ചെയ്ത് നേരിട്ട് ആ നമ്പറിലേക്ക് WhatsApp തുറക്കുന്നു
-      await generatePDFBlobAndAction(d, 'download');
-      if (waNum) {
-        window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msgText)}`, '_blank');
       }
     }
 
