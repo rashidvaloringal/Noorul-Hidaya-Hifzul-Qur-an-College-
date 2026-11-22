@@ -1,1 +1,0 @@
-# Noorul-Hidaya-Hifzul-Qur-an-College-
