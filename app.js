@@ -97,7 +97,6 @@ function collectFormData() {
     job: document.getElementById('job').value,
     mother_name: document.getElementById('motherName').value,
     dob: document.getElementById('dob').value,
-    dob_words: document.getElementById('dobWords').value,
     madrasa_info: document.getElementById('madrasaInfo').value,
     samastha_reg: document.getElementById('samasthaReg').value,
     school_info: document.getElementById('schoolInfo').value,
@@ -129,7 +128,6 @@ function fillPrintLayout(data) {
     document.getElementById('pr_dob').innerText = '';
   }
 
-  document.getElementById('pr_dobWords').innerText = data.dob_words ? `(${data.dob_words})` : '';
   document.getElementById('pr_madrasa').innerText = data.madrasa_info;
   document.getElementById('pr_samastha').innerText = data.samastha_reg;
   document.getElementById('pr_school').innerText = data.school_info;
