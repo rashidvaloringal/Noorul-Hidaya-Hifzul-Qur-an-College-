@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS admissions (
   father_name TEXT,
   job TEXT,
   mother_name TEXT,
-  dob TEXT,
-  dob_words TEXT,
+  
+  
   madrasa_info TEXT,
   samastha_reg TEXT,
   school_info TEXT,
